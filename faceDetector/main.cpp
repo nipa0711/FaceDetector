@@ -10,8 +10,8 @@ using namespace cv::dnn;
 #include <string>
 using namespace std;
 
-const unsigned inWidth = 300;
-const unsigned inHeight = 300;
+const int inWidth = 300;
+const int inHeight = 300;
 const double inScaleFactor = 1.0;
 const Scalar meanVal(104.0, 177.0, 123.0);
 

@@ -81,7 +81,6 @@ void saveFaceFile(Mat face, string fileName, int faceCount)
 		saveName.append("-" + fileName);
 	}
 	imwrite(saveDir + "\\" + saveName, face);
-	faceCount++;
 }
 
 void makeFace(Mat frame, string fileName)
@@ -93,6 +92,9 @@ void makeFace(Mat frame, string fileName)
 		Mat detection = net.forward("detection_out");
 		Mat detectionMat(detection.size[2], detection.size[3], CV_32F, detection.ptr<float>());
 
+		inputBlob.release();
+		detection.release();
+
 		double confidenceThreshold = 0.8;
 		int faceCount = 0;
 
@@ -100,10 +102,12 @@ void makeFace(Mat frame, string fileName)
 		register int yLeftBottom;
 		register int xRightTop;
 		register int yRightTop;
+		register float confidence;
+		Mat face;
 
 		for (register int i = 0; i < detectionMat.rows; i++)
 		{
-			register float confidence = detectionMat.at<float>(i, 2);
+			confidence = detectionMat.at<float>(i, 2);
 			if (confidence > confidenceThreshold)
 			{
 				xLeftBottom = static_cast<int>(detectionMat.at<float>(i, 3) * frame.cols);
@@ -115,19 +119,22 @@ void makeFace(Mat frame, string fileName)
 					(int)(xRightTop - xLeftBottom),
 					(int)(yRightTop - yLeftBottom));
 
-				Mat face = frame(object);
+				face = frame(object);
 				if (type.compare("image") == 0)
 				{
 					saveFaceFile(face, fileName, faceCount);
 				}
 				else
 				{
-					rectangle(frame, object, Scalar(0, 255, 0));
-					resizeWindow("result", 1280, 720);
-					imshow("result", frame);
+					saveFaceFile(face, fileName, faceCount);
+					//rectangle(frame, object, Scalar(0, 255, 0));
+					//resizeWindow("result", 1280, 720);
+					//imshow("result", frame);
 				}
+				faceCount++;
 			}
 		}
+		face.release();
 	}
 	catch (Exception e) {
 

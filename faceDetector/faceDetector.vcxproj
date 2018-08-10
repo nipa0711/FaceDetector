@@ -140,6 +140,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="data\opencv_ffmpeg340.dll" />
+    <None Include="data\opencv_ffmpeg340_64.dll" />
+    <None Include="data\opencv_world340.dll" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
